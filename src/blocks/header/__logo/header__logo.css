@@ -4,6 +4,7 @@
 
 @media all and (max-width: 580px) {
   .header__logo {
+    grid-row: 1 / span 2;
     margin-left: 27px;
   }
 }

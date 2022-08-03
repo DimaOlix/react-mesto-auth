@@ -11,9 +11,7 @@ function Main({
   onEditProfile, 
   onAddPlace, 
   onCardClick,
-  onConfirmationDelete,
-  // isDeleteCard,
-  
+  onConfirmationDelete,  
   onCardDeleteClick,
 }) {
 
@@ -53,8 +51,6 @@ function Main({
               onCardLike={onCardLike}
               onCardDelete={onCardDelete}
               onConfirmationDelete={onConfirmationDelete}
-              // isDeleteCard={isDeleteCard}
-
               onCardDeleteClick={onCardDeleteClick}
             />  
           ))}

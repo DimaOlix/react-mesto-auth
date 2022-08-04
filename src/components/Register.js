@@ -4,19 +4,17 @@ import logo from '../images/logo.svg';
 import { useForm } from "../hooks/useForm";
 
 
+function Register({ requestRegister }) {
 
-function Register({onRegister}) {
-  const{values, handleChange, setValues} = useForm({login: '', password: ''});
+  const{ values, handleChange } = useForm({ login: '', password: '' });
 
-  function handleSubmit(e) {
+  function onRegister(e) {
     e.preventDefault();
-    onRegister({values});
+    requestRegister({ values });
   }
-
 
   return (
     <>
-
       <section className="header">
       <img className="header__logo" src={logo} alt="Логотип"/>
       <Link className="header__link" to='/sign-in'>Войти</Link>
@@ -28,7 +26,7 @@ function Register({onRegister}) {
         <form 
         className="form-identification form-identification_type_login"
         name="popup-login"
-        onSubmit={handleSubmit}
+        onSubmit={onRegister}
         >
 
           <input
@@ -67,7 +65,6 @@ function Register({onRegister}) {
           className="form-identification__button"
           type="submit" 
           name="save-button">Зарегистрироваться
-            {/* {buttonText} */}
           </button>
 
         </form>

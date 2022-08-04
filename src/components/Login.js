@@ -5,15 +5,14 @@ import { useForm } from "../hooks/useForm";
 
 
 
-function Login({ onLogin }) {
+function Login({ requestLogin }) {
 
-  const{values, handleChange, setValues} = useForm({login: '', password: ''});
+  const{ values, handleChange } = useForm({ login: '', password: '' });
 
-  function handleSubmit(e) {
+  function onLogin(e) {
     e.preventDefault();
-    onLogin({values});
+    requestLogin({ values });
   }
-
 
   return (
     <>
@@ -32,7 +31,7 @@ function Login({ onLogin }) {
         <form 
         className="form-identification form-identification_type_login"
         name="identification-login"
-        onSubmit={handleSubmit}
+        onSubmit={onLogin}
         >
 
           <input

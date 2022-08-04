@@ -1,8 +1,7 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm.js';
 
-export default function PopupWithConfirmation({isOpen, onCardDelete, onClose}) {
-
+export default function PopupWithConfirmation({ isOpen, onCardDelete, onClose, onCloseOverlay }) {
 
   return (
     <PopupWithForm
@@ -12,6 +11,7 @@ export default function PopupWithConfirmation({isOpen, onCardDelete, onClose}) {
     onClose={onClose}
     buttonText='Да'
     title='Вы уверены?'
+    onCloseOverlay={onCloseOverlay}
     >
     </PopupWithForm>
   )

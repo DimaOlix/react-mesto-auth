@@ -6,10 +6,11 @@ import { useForm } from "../hooks/useForm.js";
 function AddPlacePopup({
   isOpen,
   onClose,
-  onAddPlace
+  onAddPlace,
+  onCloseOverlay
 }) {
 
-  const{values, handleChange, setValues} = useForm({});
+  const{ values, handleChange, setValues } = useForm({});
 
   React.useEffect(() => {
     if(!isOpen) {
@@ -32,7 +33,8 @@ function AddPlacePopup({
     title='Новое место'
     name='add'
     buttonText='Создать'
-    isOpen={`${isOpen ? 'popup_opened' : ''}`}>
+    isOpen={`${isOpen ? 'popup_opened' : ''}`}
+    onCloseOverlay={onCloseOverlay}>
     
     <input
       className="form__input form__input_value_place"

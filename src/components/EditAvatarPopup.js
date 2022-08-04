@@ -2,7 +2,7 @@ import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
 
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
+function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, onCloseOverlay }) {
 
   const avatarRef = React.useRef();
 
@@ -28,6 +28,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     buttonText='Сохранить'
     isOpen={`${isOpen ? 'popup_opened' : ''}`}
     onSubmit={handleSubmit}
+    onCloseOverlay={onCloseOverlay}
   >
     <input
       className="form__input form__input_value_link"

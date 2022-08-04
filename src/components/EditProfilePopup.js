@@ -4,10 +4,9 @@ import PopupWithForm from "./PopupWithForm.js";
 import { useForm } from "../hooks/useForm.js";
 
 
-function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
+function EditProfilePopup({ isOpen, onClose, onUpdateUser, onCloseOverlay }) {
 
   const currentUser = React.useContext(CurrentUserContext);
-
   const{values, handleChange, setValues} = useForm({name: '', activity: ''});
 
   React.useEffect(() => {
@@ -31,6 +30,7 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
       buttonText='Сохранить'
       isOpen={`${isOpen ? 'popup_opened' : ''}`}
       onSubmit={handleSubmit}
+      onCloseOverlay={onCloseOverlay}
     >
       <input
         className="form__input form__input_value_name"

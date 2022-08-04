@@ -26,7 +26,6 @@ class ApiAuth {
   }
 
   autorise({ values }) {
-    console.log(values.password)
     return fetch(`${this.url}/signin`, {
       method: 'POST',
       headers: {
@@ -37,7 +36,7 @@ class ApiAuth {
         "email": values.login
       })
     })
-    .then(res => res.json());
+    .then(res => this._checkResponse(res));
   }
 
   getEmail(token) {
@@ -48,7 +47,7 @@ class ApiAuth {
         "Authorization" : `Bearer ${token}`
       }
     })
-    .then(res => res.json());
+    .then(res => this._checkResponse(res));
   }
 }
 

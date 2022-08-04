@@ -26,23 +26,17 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState(null);
   const [selectedCardDelete, setSelectedCardDelete] = React.useState(null);
   const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = React.useState(false);
-  const [statusRegister, setStatusRegistr] = React.useState(null);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [userInfo, setUserInfo] = React.useState({ '_id': '', 'email': '' });
   const history = useHistory();
-  
-  
-  const [registerOn, setRegisterOn] = React.useState(false);
-  const [registerError, setRegisterError] = React.useState(false);
+  const [statusRegister, setStatusRegistr] = React.useState(null);
+  const [registerConfirmation, setRegisterConfirmation] = React.useState(false);
   
   const isOpen = isEditAvatarPopupOpen 
   || isEditProfilePopupOpen 
-  || isAddPlacePopupOpen 
-  || registerOn 
-  || registerError 
+  || isAddPlacePopupOpen
+  || registerConfirmation
   || selectedCard;
-
-  console.log(isOpen)
 
   React.useEffect(() => {
     Api.getUserInfo()
@@ -75,96 +69,65 @@ function App() {
     }
   }, [isOpen])
 
+  React.useEffect(() => {
+    setLoggedIn(false);
 
+    tokenCheck()
+  }, [])
 
+  React.useEffect(() => {
+    if(loggedIn) {
+      history.push('/');
+    }
+  }, [loggedIn, history])
 
+  function tokenCheck() {
+    const jwt =  localStorage.getItem('jwt');
 
+    if(!jwt) {
+      return
+    }
 
-function tokenCheck() {
-  const jwt =  localStorage.getItem('jwt');
+    ApiAuth.getEmail(jwt)
+    .then((res) => {    
+        setUserInfo({
+          '_id': res.data['_id'],
+          'email': res.data['email']
+        });
 
-  if(!jwt) {
-    return
+        setLoggedIn(true);
+    })
+    .catch((err) => console.log(err))
   }
 
-  ApiAuth.getEmail(jwt)
-  .then((res) => {    
-      setUserInfo({
-        '_id': res.data['_id'],
-        'email': res.data['email']
-      });
-
+  function requestLogin({ values }) {
+    ApiAuth.autorise({ values })
+    .then((res) => {
+      console.log(res.token)
+      setUserInfo({'email': values.login});
+      localStorage.setItem('jwt', res.token);
       setLoggedIn(true);
-  })
-}
-
-React.useEffect(() => {
-  setLoggedIn(false);
-
-  tokenCheck()
-}, [])
-
-React.useEffect(() => {
-  if(loggedIn) {
-    history.push('/');
+    })
+    .catch((err) => console.log(err))
   }
-}, [loggedIn])
 
-
-function onLogin({ values }) {
-  ApiAuth.autorise({ values })
-  .then((res) => {
-    console.log(res.token)
-    setUserInfo({'email': values.login});
-    localStorage.setItem('jwt', res.token);
-    setLoggedIn(true);
-  })
-}
-// localStorage.removeItem('jwt');
-
-
-function onRegister({ values }) {
-  return ApiAuth.registr({ values })
-  .then((res) => {
-    console.log(res);
-    setRegisterOn(true);    
-    history.push('/sign-in');
-  })
-  .catch(() => {
-    setRegisterError(true);
-    history.push('/sign-up');
-  })
-}
-
-
-function handleViewTooltip() {
-  if(registerOn) {
-    setStatusRegistr(true);
-  } else if(registerError) {
-    setStatusRegistr(false);
-  } else {
-    setStatusRegistr(null)
+  function requestRegister({ values }) {
+    return ApiAuth.registr({ values })
+    .then((res) => {
+      setStatusRegistr(true);    
+      setTimeout(() => setRegisterConfirmation(true), 0);
+      history.push('/sign-in');
+    })
+    .catch(() => {
+      setStatusRegistr(false);
+      setTimeout(() => setRegisterConfirmation(true), 0);
+      history.push('/sign-up');
+    })
   }
-}
 
-React.useEffect(() => {
-  handleViewTooltip()
-}, [registerOn, registerError])
-
-
-function handleSignOut() {
-  localStorage.removeItem('jwt');
-}
-
-
-
-
-
-
-
-
-
-
+  function handleSignOut() {
+    localStorage.removeItem('jwt');
+  }
 
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -245,16 +208,19 @@ function handleSignOut() {
     setSelectedCardDelete(null);
   }
 
+  function handleCloseOverlay(evt) {
+    return evt.target.classList.contains('popup_opened') && closeAllPopups();
+  }
+
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsConfirmationPopupOpen(false);
-    setRegisterOn(false);
-    setRegisterError(false)
+    setRegisterConfirmation(false);
     setSelectedCard(null);
   }
-console.log(userInfo)
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
@@ -264,17 +230,17 @@ console.log(userInfo)
         path='/'
         userInfo={userInfo}
         setLoggedIn={setLoggedIn}
-        onSignOut={handleSignOut}
+        handleSignOut={handleSignOut}
         component={Header}  />
         
         <Switch>
 
           <Route path='/sign-in'>
-            <Login onLogin={onLogin} />
+            <Login requestLogin={requestLogin} />
           </Route>
 
           <Route path='/sign-up'>
-            <Register onRegister={onRegister} />
+            <Register requestRegister={requestRegister} />
           </Route>
 
           <ProtectedRoute 
@@ -305,30 +271,35 @@ console.log(userInfo)
         <ImagePopup
           card={selectedCard}
           onClose={closeAllPopups}
+          onCloseOverlay={handleCloseOverlay}
         />
 
         <EditProfilePopup 
           isOpen={isEditProfilePopupOpen} 
           onClose={closeAllPopups} 
           onUpdateUser={handleUpdateUser}
+          onCloseOverlay={handleCloseOverlay}
         />
       
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen} 
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
+          onCloseOverlay={handleCloseOverlay}
         />
 
         <EditAvatarPopup 
           isOpen={isEditAvatarPopupOpen} 
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
+          onCloseOverlay={handleCloseOverlay}
         />
 
         <PopupWithConfirmation
         isOpen={isConfirmationPopupOpen}
         onClose={closeAllPopups}
         onCardDelete={handleDeleteCard}
+        onCloseOverlay={handleCloseOverlay}
         >
         </PopupWithConfirmation>
 
@@ -338,15 +309,12 @@ console.log(userInfo)
         component={Footer} 
         />
 
-        <InfoTooltip 
-
+        <InfoTooltip
         setStatusRegistr={setStatusRegistr}
         statusRegister={statusRegister}
-
-        registerOn={registerOn} 
-        registerError={registerError} 
-        isOpen={ registerOn || registerError ? 'popup_opened' : '' } 
+        isOpen={ registerConfirmation ? 'popup_opened' : '' } 
         onClose={closeAllPopups}
+        onCloseOverlay={handleCloseOverlay}
         />
 
       </div>

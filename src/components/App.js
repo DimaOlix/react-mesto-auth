@@ -146,6 +146,7 @@ function App() {
           return c._id !== selectedCardDelete._id;
         })
       });
+      closeAllPopups();
     })
     .catch((err) => console.log(err))
   }
@@ -204,7 +205,6 @@ function App() {
   function handleDeleteCard(e) {
     e.preventDefault();
     deleteCard();
-    closeAllPopups();
     setSelectedCardDelete(null);
   }
 

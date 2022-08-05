@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/mesto-react/static/css/main.6c66a9fe.chunk.css",
+    "main.js": "/mesto-react/static/js/main.4565a3f5.chunk.js",
+    "main.js.map": "/mesto-react/static/js/main.4565a3f5.chunk.js.map",
+    "runtime-main.js": "/mesto-react/static/js/runtime-main.c1099b2e.js",
+    "runtime-main.js.map": "/mesto-react/static/js/runtime-main.c1099b2e.js.map",
+    "static/js/2.8fbb54f2.chunk.js": "/mesto-react/static/js/2.8fbb54f2.chunk.js",
+    "static/js/2.8fbb54f2.chunk.js.map": "/mesto-react/static/js/2.8fbb54f2.chunk.js.map",
+    "index.html": "/mesto-react/index.html",
+    "precache-manifest.74019bd52721b1e61de96950c769e07b.js": "/mesto-react/precache-manifest.74019bd52721b1e61de96950c769e07b.js",
+    "service-worker.js": "/mesto-react/service-worker.js",
+    "static/css/main.6c66a9fe.chunk.css.map": "/mesto-react/static/css/main.6c66a9fe.chunk.css.map",
+    "static/media/index.css": "/mesto-react/static/media/VectorAva.d476a8b8.svg",
+    "static/media/InfoTooltipErr.svg": "/mesto-react/static/media/InfoTooltipErr.c32299fa.svg",
+    "static/media/InfoTooltipOk.svg": "/mesto-react/static/media/InfoTooltipOk.7fc4c149.svg",
+    "static/media/logo.svg": "/mesto-react/static/media/logo.51772f7c.svg"
+  }
+}
